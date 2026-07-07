@@ -66,6 +66,8 @@ Chemin nominal, rien a changer :
 2. La tache `log_quality_alert` apparait skippee, c'est le comportement normal du branchement.
 3. Verifier le chargement : `docker compose exec postgres-metier psql -U qualite_air -d qualite_air -c "SELECT count(*) FROM gold.fait_mesure_air;"`
 
+![DAG chemin nominal](docs/captures/dag_nominal.png)
+
 Chemin echec qualite, le DAG reste vert et la donnee part en quarantaine :
 
 1. Dans Airflow, menu Admin puis Variables, passer `qualite_air_pm_max` de 999 a `1`
@@ -77,6 +79,8 @@ Chemin echec qualite, le DAG reste vert et la donnee part en quarantaine :
    `docker compose exec postgres-metier psql -U qualite_air -d qualite_air -c "SELECT regle, nb_rejets, taux_conformite FROM meta.quality_log ORDER BY cree_le DESC LIMIT 5;"`
 4. Remettre `qualite_air_pm_max` a `999`.
 
+![DAG chemin echec qualite, vert avec chargement skippe](docs/captures/dag_echec_qualite.png)
+
 Chemin echec technique, le DAG passe rouge :
 
 1. Dans Admin puis Variables, remplacer `qualite_air_api_url` par
@@ -85,6 +89,8 @@ Chemin echec technique, le DAG passe rouge :
    180 secondes, le DAG finit rouge.
 3. Remettre l'URL d'origine :
    `https://data.sensor.community/airrohr/v1/filter/country=FR`.
+
+![DAG chemin echec technique, rouge](docs/captures/dag_echec_technique.png)
 
 Remarque : relancer `docker compose up -d` reexecute l'init et remet les variables aux
 valeurs par defaut, pratique pour repartir propre apres les demos.
@@ -117,6 +123,10 @@ lot en `nb_ignores_gold`.
 
 Il faut laisser le pipeline tourner quelques heures pour que la heatmap horaire ait du relief,
 la carte et les indicateurs parlent des le premier run.
+
+![Dashboard Metabase avec les KPI](docs/captures/dashboard_metabase.png)
+
+![Front coureur RunAir](docs/captures/runair.png)
 
 ## Front coureur RunAir
 
