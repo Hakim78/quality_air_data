@@ -1,0 +1,5 @@
+# ces dependances sont installees dans les conteneurs airflow via _PIP_ADDITIONAL_REQUIREMENTS du docker-compose
+# je garde ce fichier comme reference, requests et psycopg2 sont deja fournis par l'image apache/airflow
+minio==7.2.15
+pandas==2.2.3
+pyarrow==18.1.0
