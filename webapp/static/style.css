@@ -1,0 +1,201 @@
+/* l'adn visuel strava : orange signature, fond clair, cartes blanches,
+   gros chiffres condenses, le reste sobre pour que l'orange se merite */
+
+:root {
+  --orange: #fc5200;
+  --orange-fonce: #e34a00;
+  --encre: #1a1e21;
+  --gris: #5b6b78;
+  --gris-clair: #9aa7b1;
+  --fond: #f7f7f9;
+  --blanc: #ffffff;
+  --vert: #2e9e4f;
+  --jaune: #e8a100;
+  --rouge: #d63b2f;
+  --ombre: 0 1px 3px rgba(16, 24, 40, .08), 0 1px 2px rgba(16, 24, 40, .04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--fond);
+  color: var(--encre);
+  line-height: 1.5;
+}
+
+.conteneur { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+.barre {
+  background: var(--blanc);
+  border-bottom: 1px solid rgba(16, 24, 40, .06);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.barre-contenu { display: flex; align-items: baseline; gap: 12px; padding: 14px 20px; }
+
+.marque {
+  font-family: "Barlow Condensed", sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: .5px;
+  color: var(--orange);
+  text-transform: uppercase;
+}
+
+.marque-sous { font-size: 13px; color: var(--gris-clair); font-weight: 500; }
+
+.hero { padding: 44px 0 24px; }
+
+.hero h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.hero-sous { margin-top: 10px; color: var(--gris); max-width: 560px; }
+
+.carte-bloc {
+  position: relative;
+  background: var(--blanc);
+  border-radius: 12px;
+  box-shadow: var(--ombre);
+  overflow: hidden;
+}
+
+#carte { height: 460px; }
+
+.legende {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 900;
+  background: rgba(255, 255, 255, .94);
+  border-radius: 8px;
+  box-shadow: var(--ombre);
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--gris);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legende-titre { font-weight: 600; color: var(--encre); margin-right: 4px; }
+
+.pastille { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 8px; }
+.pastille.ok { background: var(--vert); }
+.pastille.moyen { background: var(--jaune); }
+.pastille.mauvais { background: var(--rouge); }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat {
+  background: var(--blanc);
+  border-radius: 12px;
+  box-shadow: var(--ombre);
+  padding: 20px 22px 16px;
+}
+
+.stat-valeur {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1;
+  display: block;
+}
+
+.stat-valeur.accent { color: var(--orange); }
+
+.stat-libelle {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--gris-clair);
+}
+
+.creneaux-bloc {
+  background: var(--blanc);
+  border-radius: 12px;
+  box-shadow: var(--ombre);
+  padding: 24px;
+  margin: 24px 0 40px;
+}
+
+.creneaux-bloc h2 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.creneaux-sous { color: var(--gris); font-size: 14px; margin: 6px 0 18px; max-width: 620px; }
+
+.creneaux {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 4px;
+}
+
+.creneau { text-align: center; }
+
+.creneau-case {
+  height: 52px;
+  border-radius: 6px;
+  background: #eef0f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--blanc);
+}
+
+.creneau-case.vide-case { color: var(--gris-clair); font-size: 12px; }
+
+.creneau-heure { font-size: 10.5px; color: var(--gris-clair); margin-top: 4px; display: block; }
+
+.creneau.meilleur .creneau-case { outline: 2.5px solid var(--orange); outline-offset: 1px; }
+.creneau.meilleur .creneau-heure { color: var(--orange); font-weight: 700; }
+
+.vide {
+  background: var(--blanc);
+  border-radius: 12px;
+  box-shadow: var(--ombre);
+  padding: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: var(--gris);
+}
+
+.vide svg { color: var(--orange); margin-bottom: 10px; }
+
+.pied {
+  background: var(--encre);
+  color: #b9c2ca;
+  font-size: 13px;
+  padding: 22px 0;
+}
+
+@media (max-width: 760px) {
+  .hero h1 { font-size: 34px; }
+  #carte { height: 340px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .creneaux { grid-template-columns: repeat(12, 1fr); row-gap: 14px; }
+}

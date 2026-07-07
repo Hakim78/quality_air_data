@@ -30,18 +30,22 @@ Le detail du cadrage est dans [docs/cadrage_metier.md](docs/cadrage_metier.md), 
 
 ## Demarrage
 
+Une seule commande, tout est automatique (initialisation d'Airflow comprise) :
+
 ```bash
-docker compose up airflow-init
 docker compose up -d
 ```
 
-Le premier demarrage telecharge les images et installe quelques dependances python dans les
-conteneurs Airflow, comptez quelques minutes. Ensuite :
+Le premier demarrage telecharge les images, initialise les bases et le compte Airflow puis
+installe quelques dependances python dans les conteneurs, comptez 5 a 10 minutes. Les
+demarrages suivants prennent moins d'une minute. Pour suivre l'initialisation :
+`docker compose logs -f airflow-init`. Ensuite :
 
 | Service | URL | Identifiants |
 |---|---|---|
 | Airflow | http://localhost:8080 | airflow / airflow |
 | Metabase | http://localhost:3000 | creation du compte au premier acces |
+| Front coureur RunAir | http://localhost:8000 | aucun |
 | Console MinIO | http://localhost:9001 | qualite_air / qualite_air_minio |
 | Postgres metier | localhost:5433 | qualite_air / qualite_air, base qualite_air |
 
@@ -114,6 +118,14 @@ lot en `nb_ignores_gold`.
 Il faut laisser le pipeline tourner quelques heures pour que la heatmap horaire ait du relief,
 la carte et les indicateurs parlent des le premier run.
 
+## Front coureur RunAir
+
+En bonus du dashboard Metabase, un front oriente utilisateur final sur http://localhost:8000 :
+carte de chaleur des PM2.5 en Ile de France, indicateurs (moyenne 24h, part au dessus du
+seuil OMS, meilleure heure pour courir, capteurs actifs) et bandeau des creneaux par heure.
+C'est une petite api FastAPI en lecture seule sur la zone gold ([webapp/app.py](webapp/app.py))
+qui sert une page statique. Le design s'inspire des codes visuels des applis de running.
+
 ## Arborescence
 
 ```
@@ -136,6 +148,9 @@ quality_air_data/
         cadrage_metier.md       partie 1 de l'enonce
         conception.md           partie 3, produite avant le code
         captures/               les captures des trois chemins
+    webapp/                     le front coureur, bonus hors enonce
+        app.py                  api fastapi en lecture sur gold
+        static/                 la page, le style et le js de la carte
 ```
 
 ## Variables Airflow

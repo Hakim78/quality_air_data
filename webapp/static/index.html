@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RunAir, cours la ou l'air est bon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- la police maison de strava est commerciale, barlow condensed est sa jumelle libre pour les gros chiffres -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="barre">
+  <div class="conteneur barre-contenu">
+    <span class="marque">RunAir</span>
+    <span class="marque-sous">qualite de l'air, Ile de France</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="conteneur">
+      <h1>Cours la ou l'air est bon</h1>
+      <p class="hero-sous">Les capteurs citoyens Sensor.Community mesurent les particules fines
+      en continu. Voici ou et quand courir sans depasser la recommandation OMS.</p>
+    </div>
+  </section>
+
+  <section class="conteneur">
+    <div class="carte-bloc">
+      <div id="carte"></div>
+      <div class="legende">
+        <span class="legende-titre">PM2.5 moyen 24h</span>
+        <span class="pastille ok"></span> bon, sous 15
+        <span class="pastille moyen"></span> 15 a 30
+        <span class="pastille mauvais"></span> au dela de 30 ug/m3
+      </div>
+    </div>
+  </section>
+
+  <section class="conteneur">
+    <div class="stats" id="stats">
+      <div class="stat">
+        <span class="stat-valeur" id="stat-pm25">--</span>
+        <span class="stat-libelle">PM2.5 moyen 24h, en ug/m3</span>
+      </div>
+      <div class="stat">
+        <span class="stat-valeur" id="stat-seuil">--</span>
+        <span class="stat-libelle">des releves au dessus du seuil OMS</span>
+      </div>
+      <div class="stat">
+        <span class="stat-valeur accent" id="stat-heure">--</span>
+        <span class="stat-libelle">meilleure heure pour courir, 7 jours</span>
+      </div>
+      <div class="stat">
+        <span class="stat-valeur" id="stat-capteurs">--</span>
+        <span class="stat-libelle">capteurs actifs sur 24h</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="conteneur">
+    <div class="creneaux-bloc">
+      <h2>Quand courir</h2>
+      <p class="creneaux-sous">PM2.5 moyen par heure de la journee, calcule sur les 7 derniers jours.
+      Vise les cases vertes, evite les pics du trafic.</p>
+      <div class="creneaux" id="creneaux"></div>
+    </div>
+  </section>
+
+  <div class="conteneur">
+    <div class="vide" id="vide" hidden>
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 3"></path>
+      </svg>
+      <p><strong>Pas encore de donnees a afficher.</strong><br>
+      Le pipeline construit l'historique run apres run : lance le DAG dans Airflow
+      et reviens dans une quinzaine de minutes.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="pied">
+  <div class="conteneur">
+    Donnees Sensor.Community, seuil OMS 2021 (PM2.5 a 15 ug/m3 en moyenne 24h).
+    Outil d'aide a la decision d'entrainement, pas un avis medical.
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -116,6 +116,18 @@ services:
       mc mb --ignore-existing local/silver
       "
 
+  # le front coureur, bonus par dessus la zone gold, metabase reste le livrable officiel
+  webapp:
+    build: ./webapp
+    ports:
+      - "8000:8000"
+    environment:
+      QUALITE_AIR_PG_DSN: postgresql://qualite_air:qualite_air@postgres-metier:5432/qualite_air
+    depends_on:
+      postgres-metier:
+        condition: service_healthy
+    restart: always
+
   metabase:
     image: metabase/metabase:latest
     ports:
