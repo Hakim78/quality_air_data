@@ -22,23 +22,29 @@ GROUP BY dl.latitude, dl.longitude;
 
 -- question 2, la heatmap temporelle : quand courir
 -- pm2.5 moyen par heure locale et par jour sur 7 jours, ile de france
--- visualisation metabase : tableau croise heure en ligne, date en colonne,
--- mise en forme conditionnelle du vert au rouge sur la valeur
+-- metabase reserve le tableau croise dynamique au constructeur de requetes,
+-- je pivote donc en sql, une colonne par jour, et j'affiche en table
+-- avec mise en forme conditionnelle du vert au rouge sur les colonnes de jours
 SELECT
-    dd.date_jour,
-    f.heure_locale,
-    round(avg(f.valeur_ug_m3), 1) AS pm25_moyen
+    f.heure_locale AS heure,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date), 1)     AS aujourd_hui,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 1), 1) AS hier,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 2), 1) AS j_moins_2,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 3), 1) AS j_moins_3,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 4), 1) AS j_moins_4,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 5), 1) AS j_moins_5,
+    round(avg(f.valeur_ug_m3) FILTER (WHERE dd.date_jour = current_date - 6), 1) AS j_moins_6
 FROM gold.fait_mesure_air f
 JOIN gold.dim_date dd ON dd.id_date = f.id_date
 JOIN gold.dim_localisation dl ON dl.id_localisation = f.id_localisation
 JOIN gold.dim_polluant dp ON dp.id_polluant = f.id_polluant
 WHERE dp.code_api = 'P2'
-  AND dd.date_jour >= current_date - 7
+  AND dd.date_jour >= current_date - 6
   AND dl.en_interieur = false
   AND dl.latitude BETWEEN 48.5 AND 49.1
   AND dl.longitude BETWEEN 1.9 AND 2.9
-GROUP BY dd.date_jour, f.heure_locale
-ORDER BY dd.date_jour, f.heure_locale;
+GROUP BY f.heure_locale
+ORDER BY f.heure_locale;
 
 -- question 3, les indicateurs : le constat immediat et la confiance dans la mesure
 -- part des releves au dessus du seuil oms, meilleur creneau, capteurs actifs, sur 24h
