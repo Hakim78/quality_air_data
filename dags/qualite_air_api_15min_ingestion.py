@@ -28,6 +28,14 @@ DAG_ID = "qualite_air_api_15min_ingestion"
 journal = logging.getLogger(__name__)
 
 
+def date_du_run(contexte) -> str:
+    # un trigger manuel sans date logique n'a pas de ds dans le contexte,
+    # je retombe alors sur la date de declenchement du run
+    if "ds" in contexte:
+        return contexte["ds"]
+    return contexte["dag_run"].run_after.strftime("%Y-%m-%d")
+
+
 @dag(
     dag_id=DAG_ID,
     description="ingestion des mesures de particules fines sensor.community, france entiere",
@@ -67,7 +75,7 @@ def qualite_air_api_15min_ingestion():
     def archive_raw_to_bronze(enregistrements: list[dict]) -> str:
         # copie fidele en bronze, nommage tracable date puis run_id
         contexte = get_current_context()
-        cle = f"qualite_air/{contexte['ds']}/{contexte['run_id']}.json"
+        cle = f"qualite_air/{date_du_run(contexte)}/{contexte['run_id']}.json"
         stockage.deposer_json_bronze(enregistrements, cle)
         journal.info("bronze archive sous %s", cle)
         return cle
@@ -90,7 +98,7 @@ def qualite_air_api_15min_ingestion():
 
         valides, rejets, rapport = quality.appliquer_regles(lignes, pm_max, fraicheur_max)
 
-        annee, mois, jour = contexte["ds"].split("-")
+        annee, mois, jour = date_du_run(contexte).split("-")
         prefixe = f"annee={annee}/mois={mois}/jour={jour}"
         cle_silver = None
         if valides:
